@@ -69,11 +69,12 @@ func DeleteUserHandler(c *gin.Context) {
 }
 
 func GetAllUserHandler(c *gin.Context) {
-	users, err := repositories.GetAllUser()
-	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(200, users)
+	c.JSON(200, gin.H{"message": "All users"})
+	// users, err := repositories.GetAllUser()
+	// if err != nil {
+	// 	c.JSON(400, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	//
+	// c.JSON(200, users)
 }

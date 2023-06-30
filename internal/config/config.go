@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+
+	"github.com/masfuulaji/go-marketplace/internal/models"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -47,6 +49,8 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	db.AutoMigrate(&models.User{})
 
 	DB = db
 	return db

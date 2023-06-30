@@ -1,5 +1,5 @@
 db_host: localhost
 db_user: postgres
-db_pass: root
+db_pass: postgres
 db_name: marketplace
 db_port: 5432
