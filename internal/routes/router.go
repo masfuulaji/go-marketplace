@@ -19,16 +19,11 @@ func SetupRouter() *gin.Engine {
 
 	user := router.Group("/user")
 	{
-		user.POST("/create", handlers.CreateUserHandler)
+		user.GET("/", handlers.GetAllUserHandler)
+		user.POST("/", handlers.CreateUserHandler)
 		user.GET("/:userID", handlers.GetUserHandler)
 		user.PUT("/:userID", handlers.UpdateUserHandler)
 		user.DELETE("/:userID", handlers.DeleteUserHandler)
-		// user.GET("/", handlers.CreateUserHandler)
-		user.GET("/", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
-				"message": "user",
-			})
-		})
 	}
 
 	return router

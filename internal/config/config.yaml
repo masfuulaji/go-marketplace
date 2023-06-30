@@ -1,4 +1,4 @@
-db_host: localhost
+db_host: db
 db_user: postgres
 db_pass: postgres
 db_name: marketplace
