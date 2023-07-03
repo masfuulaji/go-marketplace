@@ -14,6 +14,11 @@ func GetUserById(userID string) (models.User, error) {
 	return user, config.DB.First(&user, userID).Error
 }
 
+func GetUserByEmail(email string) (models.User, error) {
+	var user models.User
+	return user, config.DB.Where("email = ?", email).First(&user).Error
+}
+
 func UpdateUser(userID string, user models.User) (models.User, error) {
 	var updatedUser models.User
 	err := config.DB.Model(&updatedUser).Where("id = ?", userID).Updates(user).Error

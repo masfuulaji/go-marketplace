@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/masfuulaji/go-marketplace/internal/models"
 	"github.com/masfuulaji/go-marketplace/internal/repositories"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func CreateUserHandler(c *gin.Context) {
@@ -14,6 +15,14 @@ func CreateUserHandler(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	user.Password = string(hashedPassword)
 
 	err = repositories.CreateUser(user)
 	if err != nil {
@@ -47,6 +56,14 @@ func UpdateUserHandler(c *gin.Context) {
 		return
 	}
 
+	if user.Password != "" {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
 	user, err = repositories.UpdateUser(userID, user)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -69,12 +86,11 @@ func DeleteUserHandler(c *gin.Context) {
 }
 
 func GetAllUserHandler(c *gin.Context) {
-	c.JSON(200, gin.H{"message": "All users"})
-	// users, err := repositories.GetAllUser()
-	// if err != nil {
-	// 	c.JSON(400, gin.H{"error": err.Error()})
-	// 	return
-	// }
-	//
-	// c.JSON(200, users)
+	users, err := repositories.GetAllUser()
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, users)
 }
