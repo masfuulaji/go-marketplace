@@ -1,12 +1,18 @@
 package routes
 
 import (
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/masfuulaji/go-marketplace/internal/handlers"
+	"github.com/masfuulaji/go-marketplace/internal/middleware"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+
+	store := cookie.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
 
 	dashboard := router.Group("/")
 	{
@@ -17,7 +23,13 @@ func SetupRouter() *gin.Engine {
 		})
 	}
 
+	auth := router.Group("/auth")
+	{
+		auth.POST("/login", handlers.LoginHandler)
+	}
+
 	user := router.Group("/user")
+    user.Use(middleware.AuthMiddleware())
 	{
 		user.GET("/", handlers.GetAllUserHandler)
 		user.POST("/", handlers.CreateUserHandler)
