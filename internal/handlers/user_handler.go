@@ -62,6 +62,8 @@ func UpdateUserHandler(c *gin.Context) {
 			c.JSON(400, gin.H{"error": err.Error()})
 			return
 		}
+
+        user.Password = string(hashedPassword)
 	}
 
 	user, err = repositories.UpdateUser(userID, user)

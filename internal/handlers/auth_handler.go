@@ -24,9 +24,17 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-    sessions := sessions.Default(c)
-    sessions.Set("user_id", result.ID)
-    sessions.Save()
+	sessions := sessions.Default(c)
+	sessions.Set("user_id", result.ID)
+	sessions.Save()
 
 	c.JSON(200, gin.H{"message": "login success"})
+}
+
+func LogoutHandler(c *gin.Context) {
+    sessions := sessions.Default(c)
+    sessions.Delete("user_id")
+    sessions.Save()
+
+    c.JSON(200, gin.H{"message": "logout success"})
 }

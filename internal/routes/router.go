@@ -23,10 +23,16 @@ func SetupRouter() *gin.Engine {
 		})
 	}
 
-	auth := router.Group("/auth")
+	login := router.Group("/auth")
 	{
-		auth.POST("/login", handlers.LoginHandler)
+		login.POST("/login", handlers.LoginHandler)
 	}
+
+    logout := router.Group("/auth")
+    logout.Use(middleware.AuthMiddleware())
+    {
+        logout.POST("/logout", handlers.LogoutHandler)
+    }
 
 	user := router.Group("/user")
     user.Use(middleware.AuthMiddleware())
@@ -37,6 +43,33 @@ func SetupRouter() *gin.Engine {
 		user.PUT("/:userID", handlers.UpdateUserHandler)
 		user.DELETE("/:userID", handlers.DeleteUserHandler)
 	}
+
+    category := router.Group("/category")
+    {
+        category.GET("/", handlers.GetAllCategoryHandler)
+        category.POST("/", handlers.CreateCategoryHandler)
+        category.GET("/:categoryID", handlers.GetCategoryHandler)
+        category.PUT("/:categoryID", handlers.UpdateCategoryHandler)
+        category.DELETE("/:categoryID", handlers.DeleteCategoryHandler)
+    }
+
+    product := router.Group("/product")
+    {
+        product.GET("/", handlers.GetAllProductHandler)
+        product.POST("/", handlers.CreateProductHandler)
+        product.GET("/:productID", handlers.GetProductHandler)
+        product.PUT("/:productID", handlers.UpdateProductHandler)
+        product.DELETE("/:productID", handlers.DeleteProductHandler)
+    }
+
+    seller := router.Group("/seller")
+    {
+        seller.GET("/", handlers.GetAllSellerHandler)
+        seller.POST("/", handlers.CreateSellerHandler)
+        seller.GET("/:sellerID", handlers.GetSellerHandler)
+        seller.PUT("/:sellerID", handlers.UpdateSellerHandler)
+        seller.DELETE("/:sellerID", handlers.DeleteSellerHandler)
+    }
 
 	return router
 }
